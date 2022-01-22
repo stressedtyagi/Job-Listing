@@ -1,6 +1,6 @@
 function Header() {
 	return (
-		<div className="grid grid-cols-[1fr_3fr] justify-items-end bg-blue-900 text-slate-50">
+		<nav className="grid grid-cols-[1fr_3fr] justify-items-end shadow-2xl w-full fixed bg-white">
 			<div className="grid grid-cols-[1fr_5fr]">
 				<img
 					src="https://via.placeholder.com/150"
@@ -10,10 +10,10 @@ function Header() {
 				<span className="text-3xl self-center">Job Listing</span>
 			</div>
 			<div className="grid gap-4 grid-cols-2 mr-1">
-				<button>Sign Up</button>
+				<button className="">Sign Up</button>
 				<button>Sign In</button>
 			</div>
-		</div>
+		</nav>
 	);
 }
 

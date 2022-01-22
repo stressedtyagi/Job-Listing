@@ -5,7 +5,7 @@ function Skeleton({ children }) {
 	return (
 		<>
 			<Header />
-			{children}
+				{children}
 			<Footer />
 		</>
 	);
