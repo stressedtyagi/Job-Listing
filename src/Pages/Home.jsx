@@ -14,7 +14,7 @@ function Home() {
 
 	return (
 		<>
-			<div className="bg-indigo-600 h-[80vh] pt-[100px]">Home route</div>
+			<div>Home route</div>
 		</>
 	);
 }
