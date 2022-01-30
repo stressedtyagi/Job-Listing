@@ -4,7 +4,7 @@ import Header from "./Header";
 
 function Skeleton({ children }) {
 	return (
-		<Container maxW="container.xl" p={0}>
+		<Container maxW="100%" p={0} m={0}>
 			<Header />
 			{children}
 			<Footer />

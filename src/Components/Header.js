@@ -1,4 +1,5 @@
 import { Box, Stack, Text } from "@chakra-ui/react";
+import Status from "./Status";
 
 function Header() {
 	return (
@@ -13,7 +14,10 @@ function Header() {
 				boxSize={"fit-content"}
 				borderWidth={"1px"}
 				borderRadius={"md"}>
-				<Text fontSize={"xl"}>Job Listing</Text>
+				<Text fontSize={"xl"}>
+					Job Listing {" | "}
+					<Status />
+				</Text>
 			</Box>
 		</Stack>
 	);
