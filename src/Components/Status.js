@@ -1,22 +1,23 @@
 import { Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import EVENTS from "../events";
-import { useSocket } from "../SocketContext";
-
-//TODO:: Error boundary for useSocket
+import { socket } from "../Socket";
 
 function Status() {
-	const socket = useSocket();
 	const [isConnected, setIsConnected] = useState(socket.connected);
 
-	useEffect(function initConnectionListener() {
-		socket.on(EVENTS.ON_DISCONNECT, disconnectionHandler);
+	useEffect(function initSocketEvents() {
+		socket.on(EVENTS.ON_CONNECTION, updateConnectionStatus);
+		socket.on(EVENTS.ON_DISCONNECT, updateConnectionStatus);
 
-		return function removeConnectionListener() {
-			socket.off(EVENTS.ON_DISCONNECT, disconnectionHandler);
+		return function clearSocketHandlers() {
+			socket.off(EVENTS.ON_CONNECTION, updateConnectionStatus);
+			socket.off(EVENTS.ON_DISCONNECT, updateConnectionStatus);
 		};
 
-		function disconnectionHandler() {
+		/******************************************************/
+
+		function updateConnectionStatus() {
 			setIsConnected(socket.connected);
 		}
 	});
