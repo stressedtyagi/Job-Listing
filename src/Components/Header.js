@@ -1,13 +1,10 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import Status from "./Status";
+import UpdatesIndicator from "./UpdatesIndicator";
 
 function Header() {
 	return (
-		<Stack
-			direction={["column", "column", "row", "row"]}
-			minW={"xl"}
-			borderWidth={"thin"}
-			p={2}>
+		<Flex wrap="wrap" borderWidth={"thin"} p={2}>
 			<Box
 				p={1}
 				px={2}
@@ -19,7 +16,10 @@ function Header() {
 					<Status />
 				</Text>
 			</Box>
-		</Stack>
+			<Spacer />
+
+			{/* <UpdatesIndicator /> */}
+		</Flex>
 	);
 }
 
