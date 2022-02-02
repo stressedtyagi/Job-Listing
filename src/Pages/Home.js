@@ -1,23 +1,47 @@
-// TODO move update listener above the v-dom tree
+import { Container, Spinner } from "@chakra-ui/react";
+import { useEffect, useState, useMemo } from "react";
+import utils from "../utils";
+import PostsTable from "../Components/PostsTable";
 
 function Home() {
-	// useEffect(function addSocketListener() {
-	// 	socket.on(EVENTS.CLIENT_POST_UPDATE, onUpdate);
+	const [data, setData] = useState([]);
 
-	// 	return function removeListener() {
-	// 		socket.off(EVENTS.CLIENT_POST_UPDATE, onUpdate);
-	// 	};
+	useEffect(function loadTableData() {
+		async function loadTableDataAsync() {
+			const posts = await utils.getPosts();
+			setData(posts);
+		}
 
-	// 	function onUpdate(data) {
-	// 		console.log("Hello");
-	// 		console.log(data);
-	// 	}
-	// });
+		loadTableDataAsync();
+	}, []);
+
+	/**
+	 * @todo: make data[0] object structure chnage as dependency of column's memo
+	 */
+	const columns = useMemo(
+		function getColumnData() {
+			const row = data[0];
+			if (!row) {
+				return [];
+			}
+			const cols = Object.keys(row);
+			const reactTableCols = cols.map((attr) => ({
+				Header: attr,
+				accessor: attr,
+			}));
+			return reactTableCols;
+		},
+		[data]
+	);
 
 	return (
-		<>
-			<div>Home route</div>
-		</>
+		<Container centerContent minW="100%" mt={6}>
+			{data.length > 0 ? (
+				<PostsTable data={data} columns={columns} />
+			) : (
+				<Spinner size="xl" />
+			)}
+		</Container>
 	);
 }
 
