@@ -4,54 +4,50 @@ import { db } from "./db";
 const PostsContext = createContext();
 
 function PostsContextProvider({ children }) {
-    /**
-     * [State]: To manage job notification
-     */
-    const [notificationCounter, setNotificationCounter] = useState([]);
-    const [highlightedJob, setHighlightedJob] = useState({});
+	/**
+	 * [State]: To manage job notification
+	 */
+	const [notificationCounter, setNotificationCounter] = useState([]);
+	const [highlightedJob, setHighlightedJob] = useState({});
 
-    useEffect(function initChangeListener() {
-        db.posts.hook("creating", increaseCounter);
+	useEffect(function initChangeListener() {
+		// db.posts.hook("creating", increaseCounter);
+		document.addEventListener("socket_update", increaseCounter);
 
-        document.addEventListener("DB Update", ({ detail }) => {
-            console.log("DB Updated : " + detail);
-        });
+		return function cleanUpdateHandler() {
+			document.removeEventListener("socket_update", increaseCounter);
+		};
 
-        return function cleanUpdateHandler() {
-            db.posts.hook("creating").unsubscribe(increaseCounter);
-        };
+		/**
+		 * @param event object with detial containing data
+		 */
 
-        /**
-         * @param {primary key of to be added row} primKey
-         * @summary updates jobAlert from null -> primKey
-         */
-        function increaseCounter(primKey, newObject) {
-            setNotificationCounter((prevObjects) => [
-                ...prevObjects,
-                newObject,
-            ]);
-        }
-    });
+		function increaseCounter({ detail: newObject }) {
+			setNotificationCounter((prevObjects) => [
+				...prevObjects,
+				newObject,
+			]);
+		}
+	});
 
-    function updateHighlightedJob(id) {
-        setNotificationCounter([]);
-        setHighlightedJob(id);
-    }
+	function updateHighlightedJob(id) {
+		setNotificationCounter([]);
+		setHighlightedJob(id);
+	}
 
-    return (
-        <PostsContext.Provider
-            value={{
-                notificationCounter: [
-                    notificationCounter,
-                    highlightedJob,
-                    updateHighlightedJob,
-                    setNotificationCounter,
-                ],
-            }}
-        >
-            {children}
-        </PostsContext.Provider>
-    );
+	return (
+		<PostsContext.Provider
+			value={{
+				notificationCounter: [
+					notificationCounter,
+					highlightedJob,
+					updateHighlightedJob,
+					setNotificationCounter,
+				],
+			}}>
+			{children}
+		</PostsContext.Provider>
+	);
 }
 
 /**
@@ -59,11 +55,11 @@ function PostsContextProvider({ children }) {
  * @returns JobAlert Context
  */
 function useJobAlert() {
-    const { notificationCounter } = useContext(PostsContext);
-    if (!notificationCounter) {
-        return false;
-    }
-    return notificationCounter;
+	const { notificationCounter } = useContext(PostsContext);
+	if (!notificationCounter) {
+		return false;
+	}
+	return notificationCounter;
 }
 
 export { useJobAlert, PostsContextProvider };
