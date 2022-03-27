@@ -13,6 +13,10 @@ function PostsContextProvider({ children }) {
     useEffect(function initChangeListener() {
         db.posts.hook("creating", increaseCounter);
 
+        document.addEventListener("DB Update", ({ detail }) => {
+            console.log("DB Updated : " + detail);
+        });
+
         return function cleanUpdateHandler() {
             db.posts.hook("creating").unsubscribe(increaseCounter);
         };
@@ -43,7 +47,6 @@ function PostsContextProvider({ children }) {
                     updateHighlightedJob,
                     setNotificationCounter,
                 ],
-                highlightedJob: [highlightedJob, setHighlightedJob],
             }}
         >
             {children}
